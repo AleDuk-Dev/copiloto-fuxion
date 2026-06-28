@@ -2,7 +2,16 @@
   "permissions": {
     "allow": [
       "Bash(npm install:*)",
-      "Bash(npm audit:*)"
+      "Bash(npm audit:*)",
+      "Bash(npx eslint:*)",
+      "Bash(npx next:*)",
+      "Bash(node_modules/.bin/next lint:*)",
+      "Bash(node_modules/.bin/eslint app:*)",
+      "Bash(node_modules/.bin/eslint \"app/**/*.ts\" \"app/**/*.tsx\" \"components/**/*.tsx\" \"lib/**/*.ts\")",
+      "Bash(node_modules/.bin/eslint \"app/**/*.ts\" \"app/**/*.tsx\" \"components/**/*.tsx\" \"lib/**/*.ts\" \"types/**/*.ts\")",
+      "Bash(npm run:*)",
+      "Bash(npx tsc:*)",
+      "Bash(find 'C:/Users/alejo/Desktop/Proyecto RAC/copiloto-fuxion' -not -path */node_modules/* -not -path */.next/* -not -path */.git/* -type f)"
     ]
   }
 }
