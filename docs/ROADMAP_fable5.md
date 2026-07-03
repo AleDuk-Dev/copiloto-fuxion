@@ -4,6 +4,16 @@
 > Este documento le dice a Fable 5 QUÉ construir y en qué orden. Se lee junto con `CLAUDE.md`
 > (reglas generales) y los Skills en `skills/`. No se salta ninguna fase sin que Alejandro lo pida.
 
+## Estado actual (2026-07-03)
+
+- **Desplegado en producción (`main`):** Fase A y Fase B, confirmadas funcionando end-to-end.
+  El RAG de Fase B corre con datos de ejemplo (`es_dato_ejemplo = true`) — el gate de Fase 0
+  sigue sin confirmarse formalmente.
+- **Bloqueador de negocio pendiente:** los emails de auth salen del dominio de pruebas de Resend
+  (`onboarding@resend.dev`), que solo entrega al dueño de la cuenta. Sin dominio propio
+  verificado, ningún usuario real puede registrarse — bloquea toda prueba con usuarios reales.
+- **Fase C: no ha comenzado.**
+
 ## Cambios respecto a la v1.0
 
 1. **Fase B ahora incluye un panel simple de priorización manual** (caliente/tibio/frío) desde el
@@ -22,7 +32,7 @@ todavía** (qué queda fuera a propósito).
 
 ---
 
-## FASE A — Fundaciones (independiente del gate de Fase 0, empieza ya)
+## FASE A — Fundaciones ✅ COMPLETADA (2026-07-03, en producción)
 
 **Depende de:** nada.
 
@@ -43,7 +53,7 @@ invitaciones — eso es Fase C.
 
 ---
 
-## FASE B — El Cerebro: generador de guiones + priorización manual
+## FASE B — El Cerebro: generador de guiones + priorización manual ✅ COMPLETADA (2026-07-03, en producción, con datos de ejemplo en el RAG)
 
 **Depende de:** Gate de Fase 0 (5+ usuarios recurrentes del Mago de Oz que pagarían) — o
 construirse con datos de ejemplo/mock mientras se espera el gate, dejando claro en el código
@@ -88,6 +98,12 @@ respuesta, scoring automático de prioridad.
 - Instrumentación de métricas por usuario desde este punto: objeciones generadas, marcadas como
   "usada"/"cerró venta" (auto-reportado), frecuencia de uso semanal, tiempo hasta primera
   generación real.
+- **Nuevo: pegar conversación completa de WhatsApp en `/dashboard/prospectos`.** El distribuidor
+  pega el texto de una conversación (no solo una objeción suelta); el sistema la resume y
+  **sugiere** un estado inicial del prospecto (caliente/tibio/frío) — el distribuidor lo confirma
+  o ajusta, nunca se guarda automático (Regla 1: humano en el loop, aplica también a la
+  clasificación). Viene de la Pregunta 02 del documento vivo del plan de negocio original, que no
+  estaba aterrizada en ningún documento técnico. Ver la especificación de pantalla en el PRD.
 
 **Criterio de terminado:** un distribuidor puede pagar, un líder ve agregados de su equipo, ningún
 prospecto se guarda sin consentimiento, y el dashboard admin muestra métricas reales de uso.

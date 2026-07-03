@@ -72,16 +72,25 @@ en silencio ni la omitas en silencio.
 
 ## Contexto de negocio que afecta decisiones técnicas
 
+- **Estado (2026-07-03): Fase A y Fase B completas y en producción (`main`),** confirmadas
+  funcionando end-to-end (auth, dashboard, RAG con datos de ejemplo, generador de objeciones,
+  historial, panel de prioridades).
+- **Bloqueador activo — emails de auth:** el envío de correos sigue en el dominio de pruebas de
+  Resend (`onboarding@resend.dev`), que solo entrega a la cuenta propia del dueño. Hasta que se
+  verifique un dominio propio, NINGÚN usuario real puede registrarse con su propio email — esto
+  bloquea cualquier prueba con usuarios reales (incluida la madre de Alejandro, primera usuaria
+  prevista), no solo un caso puntual.
 - **Fuxion ya tiene su propia app de IA interna** ("Fuxion Avatar" — genera videos con avatar para
   prospección en redes, construida por el CEO). No compite directamente con este producto (el
   Copiloto es texto/objeciones/CRM, no video), pero por eso: NO priorices generación de video o
   avatares en este proyecto — sería redundante con lo que Fuxion ya está desplegando a toda la red.
   El valor de este producto está en el dataset propietario de objeciones reales y en el CRM ligero,
   no en features visuales llamativas.
-- **Gate de negocio activo:** todavía no se ha confirmado la validación de Fase 0 (5+ usuarios
-  recurrentes del "Mago de Oz" que dicen que pagarían). Por eso la Fase B (RAG con datos reales de
-  producción) no se activa con distribuidores reales todavía — se construye con datos de ejemplo
-  mientras se espera el gate. Pregunta si no estás seguro de si el gate ya se cumplió.
+- **Gate de negocio activo:** todavía no se ha confirmado formalmente la validación de Fase 0
+  (5+ usuarios recurrentes del "Mago de Oz" que dicen que pagarían). Por eso la Fase B, aunque ya
+  está construida y desplegada, funciona con datos de ejemplo en el RAG (`es_dato_ejemplo = true`,
+  purgables) y no se activa con distribuidores reales todavía. Pregunta si no estás seguro de si
+  el gate ya se cumplió.
 - **Optimización de coste de tokens es una decisión de arquitectura, no un ajuste posterior.** Los
   usuarios finales no son técnicos y nunca deben escribir un prompt libre. Ver
   `skills/token-optimization/SKILL.md` antes de construir cualquier endpoint que llame a Claude.

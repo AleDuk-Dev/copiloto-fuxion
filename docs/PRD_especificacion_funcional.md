@@ -106,6 +106,31 @@ FASE D
   consentimiento, el sistema bloquea el guardado con un mensaje claro de por qué (no un error
   técnico genérico).
 
+### `/dashboard/prospectos` — pegar conversación de WhatsApp (dentro del CRM)
+- **Qué hace:** en la ficha de un prospecto (o al crearlo), el distribuidor pega el texto completo
+  de una conversación de WhatsApp (copiar/pegar manual — NO integración con WhatsApp Business API,
+  ver "No construir todavía" en el roadmap). El sistema devuelve: (a) un resumen corto de la
+  conversación, y (b) un estado inicial **sugerido** (caliente/tibio/frío). El distribuidor lo
+  confirma o lo ajusta antes de guardar — **la sugerencia nunca se guarda automáticamente**
+  (Regla 1: humano en el loop, aplica también a la clasificación, no solo al envío de mensajes).
+  Origen: Pregunta 02 del documento vivo del plan de negocio original.
+- **User story:** "Como distribuidor, quiero pegar la conversación completa que tuve con un
+  prospecto y que el sistema me la resuma y me sugiera qué tan caliente está, para no tener que
+  releer todo el chat ni clasificar de memoria — pero decidiendo yo el estado final."
+- **Casos borde:**
+  - **Texto pegado muy largo:** límite de caracteres explícito en el campo (con contador visible).
+    Si se excede, se avisa antes de enviar — no se trunca en silencio ni se manda completo a la
+    API (ver `skills/token-optimization/SKILL.md`: entrada acotada, nunca prompt libre sin tope).
+  - **Consentimiento GDPR:** aplica el mismo gate técnico del CRM — si el prospecto no tiene
+    `consent_given = true`, no se puede guardar ni el resumen ni el estado. La conversación pegada
+    NUNCA se persiste completa: solo el resumen y el estado confirmado. El texto crudo se descarta
+    tras generar la sugerencia.
+  - **Menciones de salud en la conversación:** si el texto menciona condiciones médicas, aplica la
+    misma detección y alerta del generador de objeciones (Skill de cumplimiento) — el resumen no
+    debe reproducir ni amplificar health claims.
+  - **El distribuidor no confirma:** si cierra o abandona sin confirmar el estado sugerido, no se
+    guarda nada.
+
 ### `/dashboard/equipo` (solo rol líder)
 - **Qué hace:** vista agregada — cuántos miembros del equipo están activos, uso promedio, sin
   acceso a conversaciones o prospectos individuales de cada uno.
