@@ -8,13 +8,13 @@ const SECCIONES = [
     href: '/dashboard/objeciones',
     titulo: 'Generador de objeciones',
     descripcion: 'Pega la objeción de tu prospecto y recibe respuestas sugeridas.',
-    disponible: false,
+    disponible: true,
   },
   {
     href: '/dashboard/prioridades',
     titulo: 'Prioridades',
     descripcion: 'Tu lista de a quién dar seguimiento: caliente, tibio o frío.',
-    disponible: false,
+    disponible: true,
   },
   {
     href: '/dashboard/prospectos',

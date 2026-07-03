@@ -73,7 +73,6 @@ create policy "perfil_update_propio" on public.perfiles
 -- ── 4. Proteger la tabla existente del Mago de Oz ────────────
 -- La tabla `objeciones` (Fase 0) se creó sin RLS y el endpoint
 -- /api/generar escribe en ella con la anon key desde el servidor.
--- NO activamos RLS aquí para no romper el flujo desplegado en main.
--- Cuando el generador migre a /dashboard/objeciones (Fase B) y las
--- escrituras sean por usuario autenticado, se activará RLS con la
--- columna user_id. Queda documentado a propósito.
+-- En Fase A no se activó RLS para no romper el flujo desplegado.
+-- RESUELTO EN FASE B: ver db/rls_objeciones.sql (RLS activado,
+-- insert anónimo preservado, lecturas bloqueadas para la anon key).

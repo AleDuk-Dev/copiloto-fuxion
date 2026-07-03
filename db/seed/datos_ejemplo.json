@@ -1,0 +1,101 @@
+{
+  "_aviso": "DATOS DE EJEMPLO — el gate de Fase 0 (5+ usuarios recurrentes que pagarían) NO está confirmado. Este corpus es mock para construir y probar el pipeline. Cuando llegue el contenido real (catálogo oficial, transcripciones de Diamantes, objeciones reales), se purga con: delete from documentos_rag where es_dato_ejemplo = true. Ningún texto aquí afirma que un producto cura, trata, previene o diagnostica una condición médica (Regla 1 del skill de cumplimiento).",
+  "chunks": [
+    {
+      "fuente_id": "ejemplo-catalogo-prunex1",
+      "source_type": "catalogo",
+      "product_tag": "peso",
+      "objection_type": null,
+      "titulo": "Prunex1 — línea de control de peso (EJEMPLO)",
+      "contenido": "Prunex1 es una bebida funcional de la línea de control de peso de Fuxion, elaborada a base de ciruela, higo y una mezcla de fibras solubles. Su función nutricional es aportar fibra dietética que contribuye al tránsito intestinal regular como parte de una alimentación balanceada. Se recomienda tomar un sobre disuelto en agua por la noche, dentro de un plan de hábitos que incluya buena hidratación, alimentación variada y actividad física. Presentación: caja de 28 sobres. Precio de referencia para el ejemplo: 130 soles (precio de socio) / 165 soles (precio público). Es un complemento de hábitos saludables, no un producto para tratar ninguna condición digestiva ni un sustituto de la orientación de un profesional de la salud. Puntos de conversación sugeridos para el distribuidor: la constancia importa más que la intensidad, los resultados dependen de los hábitos completos de cada persona, y siempre presentar el producto como parte de una rutina de bienestar general."
+    },
+    {
+      "fuente_id": "ejemplo-catalogo-thermo-t3",
+      "source_type": "catalogo",
+      "product_tag": "peso",
+      "objection_type": null,
+      "titulo": "Thermo T3 — línea de control de peso (EJEMPLO)",
+      "contenido": "Thermo T3 es una bebida funcional de la línea de control de peso, formulada con extracto de té verde, cafeína natural, L-carnitina y camu camu. Su función nutricional es acompañar la rutina de ejercicio aportando ingredientes asociados al metabolismo energético normal, dentro de una dieta equilibrada. Se sugiere tomarlo antes de la actividad física de la mañana. No es un quemador de grasa milagroso y no produce resultados sin cambios de hábitos: la comunicación correcta es 'acompaña tu esfuerzo', nunca 'baja de peso por ti'. No prometer cifras de pérdida de peso ni plazos concretos — cada organismo responde distinto y prometer resultados específicos es un claim prohibido. Presentación: caja de 28 sobres. Precio de referencia para el ejemplo: 145 soles (socio) / 180 soles (público)."
+    },
+    {
+      "fuente_id": "ejemplo-catalogo-vita-xtra-t",
+      "source_type": "catalogo",
+      "product_tag": "energia",
+      "objection_type": null,
+      "titulo": "Vita Xtra T+ — línea de energía y deporte (EJEMPLO)",
+      "contenido": "Vita Xtra T+ es una bebida energizante natural de la línea de energía y deporte, a base de maca amarilla, guaraná, camu camu y té verde. Su propósito es aportar energía de fuentes naturales para el día a día: trabajo, estudio o entrenamiento, como alternativa a las bebidas energéticas tradicionales con alto contenido de azúcar. Aporta vitaminas del complejo B que contribuyen al metabolismo energético normal. Diferenciales conversacionales frente a energizantes comerciales: ingredientes de origen natural andino y amazónico, menor contenido de azúcar, y respaldo del catálogo oficial con registro sanitario. Presentación: caja de 28 sobres. Precio de referencia para el ejemplo: 120 soles (socio) / 150 soles (público). No posicionarlo como solución para el cansancio crónico: si un prospecto reporta fatiga persistente, eso puede ser un tema de salud que debe revisar con un profesional."
+    },
+    {
+      "fuente_id": "ejemplo-catalogo-beauty-in",
+      "source_type": "catalogo",
+      "product_tag": "piel",
+      "objection_type": null,
+      "titulo": "Beauty-In — línea de piel (EJEMPLO)",
+      "contenido": "Beauty-In es una bebida funcional de la línea de cuidado de la piel, formulada con colágeno hidrolizado, vitamina C de camu camu, zinc y antioxidantes de frutos andinos. Su función nutricional es aportar nutrientes que contribuyen al mantenimiento normal de la piel desde adentro, como complemento de una rutina de cuidado externa y de una buena hidratación. La vitamina C contribuye a la formación normal de colágeno. Comunicación correcta: 'nutre tu piel desde adentro como parte de tu rutina de cuidado'. Comunicación prohibida: prometer eliminación de arrugas, manchas o acné, o dar plazos de resultados visibles — eso es un claim de resultado garantizado. Presentación: caja de 28 sobres. Precio de referencia para el ejemplo: 160 soles (socio) / 199 soles (público). El público típico valora que sea un hábito diario simple (un sobre en agua fría por la mañana) en vez de un procedimiento costoso."
+    },
+    {
+      "fuente_id": "ejemplo-objecion-precio-caro",
+      "source_type": "objecion_real",
+      "product_tag": "general",
+      "objection_type": "precio",
+      "titulo": "Objeción: 'está muy caro' (EJEMPLO)",
+      "contenido": "Objeción real capturada (ejemplo): 'Me interesa pero está muy caro, no me alcanza este mes.' Manejo que funcionó en la red: primero validar sin pelear el precio ('te entiendo, es una inversión y está bien pensarla'). Luego reencuadrar a coste por día: una caja de 28 sobres equivale a entre 4 y 6 soles diarios, comparable con lo que la persona ya gasta en un café, una gaseosa o un snack — la pregunta no es si tiene el dinero sino en qué lo está poniendo hoy. Cerrar con una opción de entrada pequeña: empezar con una sola caja en vez del paquete completo, o sumarse al pedido grupal del mes para acceder al precio de socio. Importante: nunca presionar ni sugerir endeudarse; si realmente no es el momento, dejar la puerta abierta y acordar retomar la conversación el mes siguiente. Los cierres forzados por precio casi siempre terminan en devolución o en un cliente que no repite."
+    },
+    {
+      "fuente_id": "ejemplo-objecion-piramide",
+      "source_type": "objecion_real",
+      "product_tag": "general",
+      "objection_type": "escepticismo",
+      "titulo": "Objeción: 'esto es una pirámide' (EJEMPLO)",
+      "contenido": "Objeción real capturada (ejemplo): 'Eso es una pirámide, ahí solo ganan los de arriba.' Manejo que funcionó en la red: no ponerse a la defensiva ni dar una clase de modelos de negocio. Responder con calma la diferencia concreta: en Fuxion se gana por vender productos reales a clientes reales, no por reclutar; hay producto físico con registro sanitario, precios públicos y la posibilidad de comprar sin afiliarse. Ofrecer la prueba más simple: 'no tienes que creerme ni unirte a nada — prueba el producto como cliente y juzga por eso'. Separar las dos conversaciones (producto vs. negocio) baja la tensión: la mayoría de escépticos del modelo están dispuestos a evaluar un producto que les resuelva algo. Si la persona insiste en el debate del modelo, no insistir: agradecer, dejar el tema y mantener la relación — varios escépticos volvieron meses después como clientes por resultados que vieron en otros."
+    },
+    {
+      "fuente_id": "ejemplo-objecion-ya-probe",
+      "source_type": "objecion_real",
+      "product_tag": "peso",
+      "objection_type": "ya_lo_probe",
+      "titulo": "Objeción: 'ya probé algo así y no me funcionó' (EJEMPLO)",
+      "contenido": "Objeción real capturada (ejemplo): 'Ya probé productos para bajar de peso y no me funcionó ninguno.' Manejo que funcionó en la red: validar la frustración de forma genuina — la persona probablemente fue víctima de promesas exageradas, y esa es justamente la razón para NO repetirlas ahora. Preguntar qué probó y qué esperaba, para entender si el problema fue el producto, la expectativa o la falta de acompañamiento. El diferencial honesto no es 'este sí funciona' (promesa prohibida), sino el acompañamiento: un plan de hábitos simple, seguimiento semanal del distribuidor y expectativas realistas desde el día uno. Proponer un compromiso corto y medible definido por la propia persona (por ejemplo, 30 días con rutina completa) en vez de una promesa de resultado. Nunca garantizar cifras de peso ni plazos: además de ser un claim prohibido, es exactamente lo que ya le falló antes y destruye la confianza."
+    },
+    {
+      "fuente_id": "ejemplo-objecion-sin-tiempo",
+      "source_type": "objecion_real",
+      "product_tag": "general",
+      "objection_type": "tiempo",
+      "titulo": "Objeción: 'no tengo tiempo para esto' (EJEMPLO)",
+      "contenido": "Objeción real capturada (ejemplo): 'Suena bien pero no tengo tiempo ni para mí, menos para un negocio.' Primero aclarar qué se le está ofreciendo, porque esta objeción suele mezclar producto y negocio. Si el interés era el producto: el consumo no exige tiempo — es un sobre disuelto en agua dentro de la rutina que ya tiene, y ese es justamente el punto (bienestar que no pide una hora de gimnasio para empezar). Si la conversación era de negocio: no minimizar la falta de tiempo con frases hechas; reconocer que sí requiere horas semanales y preguntar si el problema es tiempo real o prioridad/interés — es mejor un 'no por ahora' honesto que un afiliado que nunca activa. Cierre suave que funcionó: proponer solo el siguiente paso pequeño (probar el producto una semana, o una llamada de 15 minutos), nunca el compromiso completo de una vez."
+    },
+    {
+      "fuente_id": "ejemplo-objecion-salud-seguridad",
+      "source_type": "objecion_real",
+      "product_tag": "general",
+      "objection_type": "salud_seguridad",
+      "titulo": "Objeción: '¿esto no me hará daño? / estoy en tratamiento' (EJEMPLO)",
+      "contenido": "Objeción real capturada (ejemplo): '¿Y esto no tiene química? Estoy tomando medicamentos y me da miedo mezclar.' Regla innegociable de la red: cuando un prospecto menciona una condición médica, medicación, embarazo o lactancia, el distribuidor NUNCA responde como si fuera personal de salud. Manejo correcto: agradecer la pregunta (es señal de interés serio), explicar solo lo verificable — son suplementos alimenticios con registro sanitario e ingredientes declarados en la etiqueta — y entregar la lista de ingredientes para que la persona la revise con su médico antes de decidir. Frase que funcionó: 'justo porque estás en tratamiento, lo responsable es que tu médico vea la etiqueta primero; yo te paso toda la información'. Esto además genera confianza y diferencia al distribuidor de los vendedores que prometen de todo. Prohibido: decir que el producto es compatible con su medicación, que 'es natural así que no hace daño', o sugerir ajustar/dejar un tratamiento."
+    },
+    {
+      "fuente_id": "ejemplo-transcripcion-seguimiento",
+      "source_type": "transcripcion_diamante",
+      "product_tag": "general",
+      "objection_type": null,
+      "titulo": "Capacitación Diamante: seguimiento sin hostigar (EJEMPLO)",
+      "contenido": "Segmento de capacitación de una líder Diamante de la red (ejemplo): 'La venta casi nunca muere por un no — muere por falta de seguimiento o por exceso de presión. Mi regla es la del valor primero: nunca escribo solo para preguntar si ya se decidió, porque eso es cobrar, no servir. Cada contacto de seguimiento lleva algo útil para esa persona: una receta con el producto, un testimonio de alguien con su mismo perfil, una respuesta a la duda que dejó abierta la última vez. Segundo: clasifico a mis prospectos en calientes, tibios y fríos, y les doy ritmos distintos — al caliente le respondo el mismo día y le propongo el siguiente paso concreto; al tibio le comparto valor una vez por semana sin pedirle nada; al frío lo saludo de vez en cuando y no lo persigo. Tercero: registro cada conversación en el momento, porque la memoria traiciona y no hay nada peor que preguntarle a alguien lo que ya te contó. El seguimiento es un servicio, no una cacería: si la persona siente que la persigues, ya perdiste.'"
+    },
+    {
+      "fuente_id": "ejemplo-transcripcion-testimonios",
+      "source_type": "transcripcion_diamante",
+      "product_tag": "general",
+      "objection_type": null,
+      "titulo": "Capacitación Diamante: cómo usar testimonios sin exagerar (EJEMPLO)",
+      "contenido": "Segmento de capacitación de una líder Diamante de la red (ejemplo): 'Los testimonios son nuestra herramienta más poderosa y también la más peligrosa si se usan mal. La regla es simple: un testimonio siempre se cuenta como experiencia personal, nunca como garantía. Está bien decir: a mí me ayudó a sentirme con más energía en las mañanas, o una clienta me contó que con la rutina completa se sintió mejor. Está prohibido convertir eso en: esto te va a quitar el cansancio, o esto elimina tal problema — en el momento en que prometes el resultado de otro, estás mintiendo aunque el testimonio sea real, porque cada cuerpo es distinto. Y jamás usamos testimonios que involucren enfermedades: si una clienta dice que le mejoró una condición médica, ese testimonio NO se comparte, porque un suplemento no trata enfermedades y compartirlo pone en riesgo legal al distribuidor. Testimonio propio, en primera persona, con contexto de hábitos completos — así se usa bien.'"
+    },
+    {
+      "fuente_id": "ejemplo-guion-primer-contacto",
+      "source_type": "guion_curso",
+      "product_tag": "general",
+      "objection_type": null,
+      "titulo": "Guion del curso: estructura V-P-C para responder objeciones (EJEMPLO)",
+      "contenido": "Material del curso de la red (ejemplo): toda respuesta a una objeción sigue la estructura V-P-C: Validar, Puente, Cierre pequeño. Validar: reconocer la preocupación como legítima en una frase, sin ironía y sin un pero inmediato ('tiene sentido que lo pienses', 'es una buena pregunta'). Puente: aportar UNA sola pieza de información nueva que cambie el ángulo — un reencuadre de coste por día, una diferencia concreta del modelo, un dato del catálogo — nunca tres argumentos seguidos, porque el que se defiende con una lista suena a vendedor acorralado. Cierre pequeño: proponer el siguiente paso más chico posible (probar una semana, ver la lista de ingredientes, una llamada de 15 minutos), nunca pedir la decisión completa. Tono siempre: cálido, de igual a igual, sin jerga de MLM y sin presión. Si después de dos intentos la persona mantiene el no, se acepta con gracia y se deja la puerta abierta — la relación vale más que la venta del mes."
+    }
+  ]
+}
