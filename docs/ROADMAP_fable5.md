@@ -4,15 +4,23 @@
 > Este documento le dice a Fable 5 QUÉ construir y en qué orden. Se lee junto con `CLAUDE.md`
 > (reglas generales) y los Skills en `skills/`. No se salta ninguna fase sin que Alejandro lo pida.
 
-## Estado actual (2026-07-03)
+## Estado actual (2026-07-07)
 
-- **Desplegado en producción (`main`):** Fase A y Fase B, confirmadas funcionando end-to-end.
-  El RAG de Fase B corre con datos de ejemplo (`es_dato_ejemplo = true`) — el gate de Fase 0
-  sigue sin confirmarse formalmente.
+- **Desplegado en producción (`main`):** Fase A, Fase B y Fase C1 (monetización + roles).
+  A y B confirmadas funcionando end-to-end. El RAG de Fase B corre con datos de ejemplo
+  (`es_dato_ejemplo = true`) — el gate de Fase 0 sigue sin confirmarse formalmente.
+- **Fase C1 probada end-to-end en producción (2026-07-07):** pago real con tarjeta de prueba de
+  Stripe (MODO TEST) confirmado; Supabase actualiza plan/estado/customer_id/subscription_id
+  correctamente; webhook validado por separado con un evento de Stripe (200, delivered).
+  **Prueba pendiente, no bloqueador de código:** el flujo de rol líder + equipo (generar código
+  de invitación, canjearlo con un segundo usuario, ver métricas agregadas en `/dashboard/equipo`)
+  — se prueba cuando haya más de un usuario real disponible, junto con la resolución del dominio
+  de email.
 - **Bloqueador de negocio pendiente:** los emails de auth salen del dominio de pruebas de Resend
   (`onboarding@resend.dev`), que solo entrega al dueño de la cuenta. Sin dominio propio
   verificado, ningún usuario real puede registrarse — bloquea toda prueba con usuarios reales.
-- **Fase C: no ha comenzado.**
+- **Resto de Fase C (C2): no ha comenzado** — CRM de prospectos con consentimiento, pegar
+  conversación de WhatsApp, dashboard admin `/admin`, instrumentación de métricas.
 
 ## Cambios respecto a la v1.0
 
@@ -86,9 +94,15 @@ respuesta, scoring automático de prioridad.
 **Depende de:** Fase B en uso recurrente real ("esto me ahorra tiempo", no solo registro).
 
 **Construir:**
-- Suscripciones: tier individual + tier líder/equipo (Stripe o similar).
+- ✅ **C1 — COMPLETADA (2026-07-07, en producción, Stripe en MODO TEST):** suscripciones
+  (tier individual 15€/mes + tier líder/equipo 79€/mes vía Stripe Checkout + Customer Portal +
+  webhook), roles con invitación por código, métricas agregadas en `/dashboard/equipo`,
+  límites de generaciones por plan, pantalla `/dashboard/suscripcion`. Pago y webhook probados
+  end-to-end; el flujo líder+equipo con un segundo usuario queda pendiente de prueba (requiere
+  resolver el dominio de email).
+- Suscripciones: tier individual + tier líder/equipo (Stripe o similar). ✅ C1
 - Roles: distribuidor individual vs. líder de equipo con acceso a métricas **agregadas** de su
-  línea (nunca conversaciones privadas de cada uno — ver Regla 4 del Skill de cumplimiento).
+  línea (nunca conversaciones privadas de cada uno — ver Regla 4 del Skill de cumplimiento). ✅ C1
 - CRM de prospectos: pseudónimo obligatorio, estado (frío/tibio/caliente/cliente/perdido), campo
   de consentimiento GDPR como gate técnico — nada se guarda sin `consent_given = true`.
 - Panel de "mis prospectos" dentro del dashboard, integrado con el panel de priorización de Fase B.

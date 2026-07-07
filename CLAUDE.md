@@ -72,9 +72,16 @@ en silencio ni la omitas en silencio.
 
 ## Contexto de negocio que afecta decisiones técnicas
 
-- **Estado (2026-07-03): Fase A y Fase B completas y en producción (`main`),** confirmadas
-  funcionando end-to-end (auth, dashboard, RAG con datos de ejemplo, generador de objeciones,
-  historial, panel de prioridades).
+- **Estado (2026-07-07): Fases A, B y C1 (monetización + roles) completas y en producción
+  (`main`).** A y B confirmadas end-to-end (auth, dashboard, RAG con datos de ejemplo, generador
+  de objeciones, historial, panel de prioridades). C1 probada end-to-end en producción: pago real
+  con tarjeta de prueba de Stripe (MODO TEST) confirmado, Supabase actualiza
+  plan/estado/customer_id/subscription_id correctamente, y el webhook validado por separado con
+  un evento de Stripe (200, delivered). **Prueba pendiente (no bloqueador de código):** el flujo
+  de rol líder + equipo (generar código de invitación, canjearlo con un segundo usuario, ver
+  métricas agregadas en `/dashboard/equipo`) — se prueba cuando haya más de un usuario real
+  disponible, junto con la resolución del dominio de email (ver bloqueador de abajo).
+- **Stripe sigue en MODO TEST.** No activar modo live sin decisión explícita de Alejandro.
 - **Bloqueador activo — emails de auth:** el envío de correos sigue en el dominio de pruebas de
   Resend (`onboarding@resend.dev`), que solo entrega a la cuenta propia del dueño. Hasta que se
   verifique un dominio propio, NINGÚN usuario real puede registrarse con su propio email — esto
