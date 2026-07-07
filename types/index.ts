@@ -43,6 +43,12 @@ export interface GenerarObjecionResponse {
   // false → el RAG no encontró chunks suficientemente similares y
   // la respuesta es más general (la UI lo avisa, no lo disimula).
   contextoSuficiente: boolean
+  // Fase C1: uso del mes contra el límite del plan.
+  usoMensual?: {
+    usadas: number
+    limite: number
+    cercaDelLimite: boolean
+  }
 }
 
 export type ResultadoHistorial = 'cerro_venta' | 'no_funciono'
@@ -66,4 +72,16 @@ export interface Prioridad {
   estado: EstadoProspecto
   nota: string | null
   creado_en: string
+}
+
+// ── Fase C1 ──────────────────────────────────────────────────
+
+export type Rol = 'distribuidor' | 'lider' | 'admin'
+export type EstadoSuscripcion = 'activa' | 'pago_fallido' | 'cancelada' | null
+
+export interface MetricasEquipo {
+  total_miembros: number
+  activos_ultimos_7d: number
+  generaciones_mes: number
+  promedio_generaciones_mes: number
 }

@@ -1,10 +1,21 @@
 import Link from 'next/link'
 import NavLinks from '@/components/dashboard/NavLinks'
+import { createClient } from '@/lib/supabase/server'
 
 export const metadata = { title: 'Dashboard — Copiloto Fuxion' }
 
 // El middleware ya garantiza que solo llegan usuarios con sesión.
-export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
+  // Fase C1: la sección "Equipo" solo se muestra a líderes/admin.
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  const { data: perfil } = user
+    ? await supabase.from('perfiles').select('rol').eq('id', user.id).single()
+    : { data: null }
+  const esLider = perfil?.rol === 'lider' || perfil?.rol === 'admin'
+
   return (
     <div className="min-h-screen bg-fx-crema">
       {/* Sidebar — desktop */}
@@ -13,7 +24,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           <span className="text-2xl">🚀</span>
           <span className="text-white font-bold">Copiloto Fuxion</span>
         </Link>
-        <NavLinks orientacion="lateral" />
+        <NavLinks orientacion="lateral" esLider={esLider} />
       </aside>
 
       {/* Barra superior — móvil */}
@@ -31,7 +42,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
       {/* Nav inferior — móvil */}
       <div className="md:hidden fixed bottom-0 inset-x-0 bg-fx-purpura-oscuro border-t border-white/10">
-        <NavLinks orientacion="inferior" />
+        <NavLinks orientacion="inferior" esLider={esLider} />
       </div>
     </div>
   )

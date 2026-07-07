@@ -26,6 +26,11 @@ export default function Generador() {
   const [respuestas, setRespuestas] = useState<Respuestas | null>(null)
   const [alertaSalud, setAlertaSalud] = useState(false)
   const [contextoSuficiente, setContextoSuficiente] = useState(true)
+  const [usoMensual, setUsoMensual] = useState<{
+    usadas: number
+    limite: number
+    cercaDelLimite: boolean
+  } | null>(null)
   const [cargando, setCargando] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -59,6 +64,7 @@ export default function Generador() {
       setRespuestas(r.respuestas)
       setAlertaSalud(r.alertaSalud)
       setContextoSuficiente(r.contextoSuficiente)
+      setUsoMensual(r.usoMensual ?? null)
     } catch {
       setError('No se pudo conectar con el servidor. Verifica tu conexión.')
     } finally {
@@ -160,6 +166,21 @@ export default function Generador() {
                 ℹ️ No tengo información específica sobre esto en la base de
                 conocimiento — estas respuestas son más generales. Revísalas con
                 más cuidado antes de usarlas.
+              </p>
+            </div>
+          )}
+
+          {/* Aviso anticipado de límite mensual (Fase C1) — avisar
+              antes, no cortar de golpe (skill de token-optimization). */}
+          {usoMensual?.cercaDelLimite && (
+            <div className="bg-fx-oro/10 border border-fx-oro/40 rounded-xl px-4 py-3">
+              <p className="text-sm text-amber-800">
+                📊 Llevas {usoMensual.usadas} de {usoMensual.limite} generaciones
+                de tu plan este mes. Si necesitas más, puedes mejorar tu plan en{' '}
+                <a href="/dashboard/suscripcion" className="underline font-semibold">
+                  Suscripción
+                </a>
+                .
               </p>
             </div>
           )}
