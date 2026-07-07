@@ -10,16 +10,30 @@ const SECCIONES = [
   { href: '/dashboard/objeciones', label: 'Objeciones', icono: '💬' },
   { href: '/dashboard/prioridades', label: 'Prioridades', icono: '🎯' },
   { href: '/dashboard/prospectos', label: 'Prospectos', icono: '👥' },
+  { href: '/dashboard/suscripcion', label: 'Suscripción', icono: '💳' },
   { href: '/dashboard/ajustes', label: 'Ajustes', icono: '⚙️' },
 ]
 
-export default function NavLinks({ orientacion }: { orientacion: 'lateral' | 'inferior' }) {
+// Solo visible para rol líder/admin (Fase C1). La pantalla también
+// valida el rol en el servidor — esto es solo navegación.
+const SECCION_EQUIPO = { href: '/dashboard/equipo', label: 'Equipo', icono: '📈' }
+
+export default function NavLinks({
+  orientacion,
+  esLider = false,
+}: {
+  orientacion: 'lateral' | 'inferior'
+  esLider?: boolean
+}) {
   const pathname = usePathname()
+  const secciones = esLider
+    ? [...SECCIONES.slice(0, 3), SECCION_EQUIPO, ...SECCIONES.slice(3)]
+    : SECCIONES
 
   if (orientacion === 'inferior') {
     return (
       <nav className="flex justify-around">
-        {SECCIONES.map((s) => {
+        {secciones.map((s) => {
           const activo = pathname.startsWith(s.href)
           return (
             <Link

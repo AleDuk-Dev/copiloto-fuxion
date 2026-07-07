@@ -9,8 +9,9 @@
 //   - Sin prompt libre: la objeción entra por plantilla fija (lib/claude.ts).
 //   - Contexto limitado: máx. 4 chunks (lib/rag.ts).
 //   - max_tokens explícito: 600 (lib/claude.ts).
-//   - Límite de uso: 15 generaciones/hora por usuario (los tiers
-//     por plan llegan en Fase C; esto evita "gratis e ilimitado").
+//   - Límite de uso: 15 generaciones/hora por usuario (anti-abuso)
+//     + límite MENSUAL por plan (Fase C1, ver lib/planes.ts). Con
+//     aviso anticipado al acercarse al límite, no corte en seco.
 //   - Tokens de entrada/salida se guardan por llamada en historial.
 //
 // Regla 3 (humano en el loop): esto devuelve texto a la UI del
@@ -23,6 +24,8 @@ import { createClient } from '@/lib/supabase/server'
 import { checkRateLimit } from '@/lib/rateLimit'
 import { recuperarContexto } from '@/lib/rag'
 import { generarRespuestas, detectarTemaSalud } from '@/lib/claude'
+import { obtenerUsoMensual } from '@/lib/uso'
+import { PLANES, UMBRAL_AVISO_LIMITE } from '@/lib/planes'
 import type { Modo } from '@/types'
 
 const MAX_GENERACIONES_HORA = 15
@@ -47,6 +50,21 @@ export async function POST(request: NextRequest) {
       { status: 429, headers: { 'X-RateLimit-Remaining': '0' } }
     )
   }
+
+  // 2b. Límite mensual por plan (Fase C1). Se calcula ANTES de
+  //     llamar a Claude — una generación bloqueada no debe costar.
+  const uso = await obtenerUsoMensual(supabase, user.id)
+  if (uso.usadas >= uso.limite) {
+    return NextResponse.json(
+      {
+        error: `Alcanzaste las ${uso.limite} generaciones de tu plan ${PLANES[uso.plan].nombre} este mes. Puedes mejorar tu plan en Suscripción.`,
+        limiteMensual: true,
+      },
+      { status: 403 }
+    )
+  }
+  // Aviso anticipado (no corte): la UI puede mostrarlo.
+  const cercaDelLimite = uso.usadas + 1 >= Math.ceil(uso.limite * UMBRAL_AVISO_LIMITE)
 
   // 3. Validación del body
   let body: { objecion?: unknown; modo?: unknown }
@@ -122,6 +140,12 @@ export async function POST(request: NextRequest) {
       respuestas: resultado.respuestas,
       alertaSalud,
       contextoSuficiente,
+      // Uso mensual tras esta generación (para el aviso anticipado).
+      usoMensual: {
+        usadas: uso.usadas + 1,
+        limite: uso.limite,
+        cercaDelLimite,
+      },
     },
     { headers: { 'X-RateLimit-Remaining': String(remaining) } }
   )
