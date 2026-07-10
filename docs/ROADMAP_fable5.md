@@ -21,6 +21,8 @@
   verificado, ningún usuario real puede registrarse — bloquea toda prueba con usuarios reales.
 - **Resto de Fase C (C2): no ha comenzado** — CRM de prospectos con consentimiento, pegar
   conversación de WhatsApp, dashboard admin `/admin`, instrumentación de métricas.
+- **Pendiente de confirmar:** el fix de `NavLinks.tsx` (Equipo visible en desktop para rol
+  líder) se aplicó pero no se probó visualmente esta sesión — verificar en la próxima.
 
 ## Cambios respecto a la v1.0
 

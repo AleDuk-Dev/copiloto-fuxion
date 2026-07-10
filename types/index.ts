@@ -74,6 +74,46 @@ export interface Prioridad {
   creado_en: string
 }
 
+// ── Fase C2 ──────────────────────────────────────────────────
+
+// El CRM amplía los 3 estados de Fase B con cliente/perdido.
+export type EstadoProspectoCrm = EstadoProspecto | 'cliente' | 'perdido'
+
+export interface Prospecto {
+  id: string
+  apodo: string
+  estado: EstadoProspectoCrm
+  nota: string | null
+  creado_en: string
+  actualizado_en: string
+}
+
+// Resumen de conversación de WhatsApp. Solo el resumen — la
+// conversación cruda pegada NUNCA se persiste ni viaja de vuelta.
+export interface ResumenWhatsapp {
+  id: string
+  resumen: string
+  estado_sugerido: EstadoProspecto
+  estado_confirmado: EstadoProspectoCrm
+  alerta_salud: boolean
+  creado_en: string
+}
+
+export interface ResumirConversacionResponse {
+  resumen: string
+  // Sugerencia de la IA — el distribuidor la confirma o ajusta
+  // antes de guardar (Regla 1: humano en el loop).
+  estadoSugerido: EstadoProspecto
+  alertaSalud: boolean
+  tokensEntrada: number
+  tokensSalida: number
+  usoMensual?: {
+    usadas: number
+    limite: number
+    cercaDelLimite: boolean
+  }
+}
+
 // ── Fase C1 ──────────────────────────────────────────────────
 
 export type Rol = 'distribuidor' | 'lider' | 'admin'

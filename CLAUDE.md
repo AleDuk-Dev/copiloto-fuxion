@@ -37,7 +37,8 @@ en silencio ni la omitas en silencio.
 
 ## Stack técnico (ya decidido — no lo cambies sin preguntar)
 
-- **Frontend:** Next.js 14 (React), Tailwind para estilos.
+- **Frontend:** Next.js 16 (React), Tailwind para estilos. Ojo: en Next 16 `params` y
+  `searchParams` son Promises — hay que await-earlas en páginas y layouts.
 - **Backend:** Node, vía API routes de Next.js (no separamos backend todavía).
 - **Base de datos:** Supabase (Postgres) con extensión `pgvector` para el RAG.
 - **IA:** Claude API (Anthropic) para generación; Voyage AI para embeddings (intercambiable, ver

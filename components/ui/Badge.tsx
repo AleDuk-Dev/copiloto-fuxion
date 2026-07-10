@@ -2,7 +2,14 @@
 // Los estados caliente/tibio/frío se usan desde Fase B, pero el componente
 // se define en Fase A como parte del sistema base.
 
-type Estado = 'caliente' | 'tibio' | 'frio' | 'proximamente' | 'neutro'
+type Estado =
+  | 'caliente'
+  | 'tibio'
+  | 'frio'
+  | 'cliente'
+  | 'perdido'
+  | 'proximamente'
+  | 'neutro'
 
 interface BadgeProps {
   estado?: Estado
@@ -13,6 +20,8 @@ const ESTILOS: Record<Estado, string> = {
   caliente: 'bg-fx-magenta/10 text-fx-magenta border-fx-magenta/30',
   tibio: 'bg-fx-oro/10 text-amber-700 border-fx-oro/40',
   frio: 'bg-sky-50 text-sky-700 border-sky-200',
+  cliente: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+  perdido: 'bg-gray-100 text-gray-500 border-gray-300',
   proximamente: 'bg-fx-lila text-fx-purpura-medio border-fx-purpura/20',
   neutro: 'bg-gray-100 text-gray-600 border-gray-200',
 }

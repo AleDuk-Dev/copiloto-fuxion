@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { createClient } from '@/lib/supabase/client'
 import RespuestaSugerida from '@/components/objeciones/RespuestaSugerida'
 import Button from '@/components/ui/Button'
 import type { GenerarObjecionResponse, Modo, Respuestas } from '@/types'
@@ -23,6 +24,10 @@ const TARJETAS = [
 export default function Generador() {
   const [objecion, setObjecion] = useState('')
   const [modo, setModo] = useState<Modo>('general')
+  // Fase C2: vínculo opcional con un prospecto del CRM — la objeción
+  // generada aparece después en la ficha de esa persona.
+  const [prospectos, setProspectos] = useState<{ id: string; apodo: string }[]>([])
+  const [prospectoId, setProspectoId] = useState('')
   const [respuestas, setRespuestas] = useState<Respuestas | null>(null)
   const [alertaSalud, setAlertaSalud] = useState(false)
   const [contextoSuficiente, setContextoSuficiente] = useState(true)
@@ -35,6 +40,18 @@ export default function Generador() {
   const [error, setError] = useState<string | null>(null)
 
   const caracteresRestantes = 1000 - objecion.length
+
+  useEffect(() => {
+    const cargarProspectos = async () => {
+      const supabase = createClient()
+      const { data } = await supabase
+        .from('prospectos')
+        .select('id, apodo')
+        .order('creado_en', { ascending: false })
+      setProspectos(data ?? [])
+    }
+    cargarProspectos()
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -51,7 +68,7 @@ export default function Generador() {
       const res = await fetch('/api/objeciones/generar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ objecion, modo }),
+        body: JSON.stringify({ objecion, modo, prospectoId: prospectoId || undefined }),
       })
       const data = await res.json()
 
@@ -124,6 +141,34 @@ export default function Generador() {
             {caracteresRestantes} caracteres restantes
           </p>
         </div>
+
+        {/* Vínculo opcional con un prospecto (Fase C2) */}
+        {prospectos.length > 0 && (
+          <div>
+            <label
+              htmlFor="prospecto"
+              className="block text-xs font-semibold text-fx-purpura-oscuro uppercase tracking-wide mb-2"
+            >
+              Prospecto (opcional)
+            </label>
+            <select
+              id="prospecto"
+              value={prospectoId}
+              onChange={(e) => setProspectoId(e.target.value)}
+              className="w-full rounded-xl border-2 border-fx-purpura/20 bg-white px-4 py-2.5 text-sm text-fx-purpura-oscuro focus:outline-none focus:border-fx-purpura focus:ring-2 focus:ring-fx-purpura/10 transition-colors"
+            >
+              <option value="">Sin vincular</option>
+              {prospectos.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.apodo}
+                </option>
+              ))}
+            </select>
+            <p className="text-xs text-fx-purpura-oscuro/40 mt-1">
+              Si la vinculas, esta objeción aparecerá en la ficha de ese prospecto.
+            </p>
+          </div>
+        )}
 
         {error && (
           <div className="bg-fx-magenta/10 border border-fx-magenta/30 text-fx-magenta rounded-xl px-4 py-3 text-sm">

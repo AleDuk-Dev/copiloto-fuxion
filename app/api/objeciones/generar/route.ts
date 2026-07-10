@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
   const cercaDelLimite = uso.usadas + 1 >= Math.ceil(uso.limite * UMBRAL_AVISO_LIMITE)
 
   // 3. Validación del body
-  let body: { objecion?: unknown; modo?: unknown }
+  let body: { objecion?: unknown; modo?: unknown; prospectoId?: unknown }
   try {
     body = await request.json()
   } catch {
@@ -88,6 +88,19 @@ export async function POST(request: NextRequest) {
   }
   if (!MODOS_VALIDOS.includes(modo)) {
     return NextResponse.json({ error: 'Modo inválido.' }, { status: 400 })
+  }
+
+  // 3b. Vínculo opcional con un prospecto del CRM (Fase C2). Se
+  //     verifica que el prospecto sea del usuario (RLS devuelve vacío
+  //     si no lo es) — si no, se guarda sin vínculo.
+  let prospectoId: string | null = null
+  if (typeof body.prospectoId === 'string' && body.prospectoId.length > 0) {
+    const { data: prospecto } = await supabase
+      .from('prospectos')
+      .select('id')
+      .eq('id', body.prospectoId)
+      .maybeSingle()
+    if (prospecto) prospectoId = prospecto.id
   }
 
   // 4. Detección de tema de salud (Regla 1 del skill de cumplimiento)
@@ -123,6 +136,7 @@ export async function POST(request: NextRequest) {
     user_id: user.id,
     objecion,
     modo,
+    prospecto_id: prospectoId,
     respuestas: resultado.respuestas,
     alerta_salud: alertaSalud,
     contexto_suficiente: contextoSuficiente,
