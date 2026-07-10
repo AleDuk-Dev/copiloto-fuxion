@@ -1,16 +1,10 @@
-import PanelPrioridades from '@/components/prioridades/PanelPrioridades'
+// Fase C2: el panel de prioridades de Fase B se consolidó dentro del
+// CRM de /dashboard/prospectos (mismos datos, migrados en
+// db/schema_fase_c2.sql). Se mantiene el redirect para no romper
+// marcadores ni hábitos de los usuarios de Fase B.
 
-export const metadata = { title: 'Prioridades — Copiloto Fuxion' }
+import { redirect } from 'next/navigation'
 
 export default function PrioridadesPage() {
-  return (
-    <div>
-      <h1 className="text-xl font-bold text-fx-purpura-oscuro mb-1">Prioridades</h1>
-      <p className="text-sm text-fx-purpura-oscuro/60 mb-6">
-        Tu lista de a quién dar seguimiento hoy. Tú marcas el estado — el
-        Copiloto no decide por ti.
-      </p>
-      <PanelPrioridades />
-    </div>
-  )
+  redirect('/dashboard/prospectos')
 }

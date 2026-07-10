@@ -1,57 +1,35 @@
 'use client'
 
-// Panel manual de priorización — Fase B.
-// Intencionalmente simple: el distribuidor marca a mano
-// caliente/tibio/frío. El scoring automático es Fase D.
+// CRM ligero de prospectos — Fase C2.
+// Consolida el panel de prioridades de Fase B (los datos se migran
+// en db/schema_fase_c2.sql). Alta rápida + lista ordenada por
+// estado + enlace a la ficha completa de cada prospecto.
 //
-// Regla 3 de CLAUDE.md (consentimiento) adelantada desde Fase C:
-// el checkbox es obligatorio en la UI Y el CHECK constraint de la
-// tabla `prioridades` rechaza cualquier insert sin consentimiento
-// (gate técnico, no solo UX). Además se pide apodo, no nombre real.
+// Regla 3 de CLAUDE.md (consentimiento): el checkbox es obligatorio
+// en la UI Y el CHECK constraint de la tabla `prospectos` rechaza
+// cualquier insert sin consentimiento = true (gate técnico, no UX).
+// Además se pide apodo, no nombre real.
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
+import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import Button from '@/components/ui/Button'
 import Badge from '@/components/ui/Badge'
 import Input from '@/components/ui/Input'
-import type { EstadoProspecto, Prioridad } from '@/types'
+import { ESTADOS_CRM, ORDEN_CRM } from '@/components/prospectos/estados'
+import type { EstadoProspectoCrm, Prospecto } from '@/types'
 
-const ESTADOS: { value: EstadoProspecto; label: string; emoji: string }[] = [
-  { value: 'caliente', label: 'Caliente', emoji: '🔥' },
-  { value: 'tibio', label: 'Tibio', emoji: '🌤️' },
-  { value: 'frio', label: 'Frío', emoji: '❄️' },
-]
-
-const ORDEN: Record<EstadoProspecto, number> = { caliente: 0, tibio: 1, frio: 2 }
-
-export default function PanelPrioridades() {
-  const [prioridades, setPrioridades] = useState<Prioridad[]>([])
-  const [cargando, setCargando] = useState(true)
+export default function ListaProspectos({ iniciales }: { iniciales: Prospecto[] }) {
+  const [prospectos, setProspectos] = useState<Prospecto[]>(iniciales)
   const [error, setError] = useState<string | null>(null)
 
   // Formulario de alta
   const [apodo, setApodo] = useState('')
-  const [estado, setEstado] = useState<EstadoProspecto>('tibio')
+  const [estado, setEstado] = useState<EstadoProspectoCrm>('tibio')
   const [consentimiento, setConsentimiento] = useState(false)
   const [guardando, setGuardando] = useState(false)
 
   const supabase = createClient()
-
-  useEffect(() => {
-    const cargar = async () => {
-      const { data, error } = await supabase
-        .from('prioridades')
-        .select('id, apodo, estado, nota, creado_en')
-        .order('creado_en', { ascending: false })
-      if (error) {
-        setError('No se pudo cargar tu lista. Recarga la página.')
-      } else {
-        setPrioridades((data ?? []) as Prioridad[])
-      }
-      setCargando(false)
-    }
-    cargar()
-  }, [])
 
   const agregar = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -75,20 +53,20 @@ export default function PanelPrioridades() {
     } = await supabase.auth.getUser()
 
     const { data, error: errInsert } = await supabase
-      .from('prioridades')
+      .from('prospectos')
       .insert({
         user_id: user?.id,
         apodo: apodo.trim(),
         estado,
         consentimiento: true,
       })
-      .select('id, apodo, estado, nota, creado_en')
+      .select('id, apodo, estado, nota, creado_en, actualizado_en')
       .single()
 
     if (errInsert || !data) {
       setError('No se pudo guardar. Intenta de nuevo.')
     } else {
-      setPrioridades((p) => [data as Prioridad, ...p])
+      setProspectos((p) => [data as Prospecto, ...p])
       setApodo('')
       setEstado('tibio')
       setConsentimiento(false)
@@ -96,24 +74,7 @@ export default function PanelPrioridades() {
     setGuardando(false)
   }
 
-  const cambiarEstado = async (id: string, nuevo: EstadoProspecto) => {
-    const anterior = prioridades
-    setPrioridades((p) => p.map((x) => (x.id === id ? { ...x, estado: nuevo } : x)))
-    const { error } = await supabase
-      .from('prioridades')
-      .update({ estado: nuevo, actualizado_en: new Date().toISOString() })
-      .eq('id', id)
-    if (error) setPrioridades(anterior)
-  }
-
-  const eliminar = async (id: string) => {
-    const anterior = prioridades
-    setPrioridades((p) => p.filter((x) => x.id !== id))
-    const { error } = await supabase.from('prioridades').delete().eq('id', id)
-    if (error) setPrioridades(anterior)
-  }
-
-  const ordenadas = [...prioridades].sort((a, b) => ORDEN[a.estado] - ORDEN[b.estado])
+  const ordenados = [...prospectos].sort((a, b) => ORDEN_CRM[a.estado] - ORDEN_CRM[b.estado])
 
   return (
     <div className="space-y-6">
@@ -139,8 +100,8 @@ export default function PanelPrioridades() {
           <label className="block text-xs font-semibold text-fx-purpura-oscuro uppercase tracking-wide mb-2">
             Estado
           </label>
-          <div className="flex gap-2">
-            {ESTADOS.map((e2) => (
+          <div className="flex flex-wrap gap-2">
+            {ESTADOS_CRM.map((e2) => (
               <button
                 key={e2.value}
                 type="button"
@@ -158,7 +119,7 @@ export default function PanelPrioridades() {
           </div>
         </div>
 
-        {/* Gate de consentimiento (Regla 3) */}
+        {/* Gate de consentimiento (Regla 3 de CLAUDE.md) */}
         <label className="flex items-start gap-2.5 cursor-pointer">
           <input
             type="checkbox"
@@ -183,10 +144,8 @@ export default function PanelPrioridades() {
         </Button>
       </form>
 
-      {/* Lista ordenada por estado */}
-      {cargando ? (
-        <p className="text-sm text-fx-purpura-oscuro/50 text-center">Cargando…</p>
-      ) : ordenadas.length === 0 ? (
+      {/* Lista ordenada por estado — cada fila lleva a la ficha */}
+      {ordenados.length === 0 ? (
         <div className="bg-white rounded-2xl border border-fx-purpura/10 p-8 text-center">
           <p className="text-sm text-fx-purpura-oscuro/60">
             Todavía no tienes prospectos en tu lista. Agrega el primero arriba.
@@ -194,40 +153,23 @@ export default function PanelPrioridades() {
         </div>
       ) : (
         <div className="space-y-2">
-          {ordenadas.map((p) => (
-            <div
+          {ordenados.map((p) => (
+            <Link
               key={p.id}
-              className="bg-white rounded-2xl border border-fx-purpura/10 shadow-sm px-4 py-3 flex items-center justify-between gap-3"
+              href={`/dashboard/prospectos/${p.id}`}
+              className="bg-white rounded-2xl border border-fx-purpura/10 shadow-sm px-4 py-3 flex items-center justify-between gap-3 hover:border-fx-purpura/40 transition-colors"
             >
               <div className="flex items-center gap-3 min-w-0">
                 <Badge estado={p.estado}>
-                  {ESTADOS.find((e2) => e2.value === p.estado)?.emoji}{' '}
-                  {ESTADOS.find((e2) => e2.value === p.estado)?.label}
+                  {ESTADOS_CRM.find((e2) => e2.value === p.estado)?.emoji}{' '}
+                  {ESTADOS_CRM.find((e2) => e2.value === p.estado)?.label}
                 </Badge>
                 <span className="text-sm font-medium text-fx-purpura-oscuro truncate">
                   {p.apodo}
                 </span>
               </div>
-              <div className="flex items-center gap-1.5 shrink-0">
-                {ESTADOS.filter((e2) => e2.value !== p.estado).map((e2) => (
-                  <button
-                    key={e2.value}
-                    onClick={() => cambiarEstado(p.id, e2.value)}
-                    title={`Marcar como ${e2.label.toLowerCase()}`}
-                    className="text-sm px-2 py-1 rounded-lg border border-fx-purpura/15 hover:border-fx-purpura/50 transition-colors"
-                  >
-                    {e2.emoji}
-                  </button>
-                ))}
-                <button
-                  onClick={() => eliminar(p.id)}
-                  title="Eliminar de la lista"
-                  className="text-sm px-2 py-1 rounded-lg border border-fx-purpura/15 text-fx-purpura-oscuro/40 hover:text-fx-magenta hover:border-fx-magenta/40 transition-colors"
-                >
-                  🗑️
-                </button>
-              </div>
-            </div>
+              <span className="text-sm text-fx-purpura-oscuro/40 shrink-0">Ver ficha →</span>
+            </Link>
           ))}
         </div>
       )}

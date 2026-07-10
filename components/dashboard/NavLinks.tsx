@@ -6,9 +6,10 @@ import { usePathname } from 'next/navigation'
 // Navegación del dashboard: lateral en desktop, inferior en móvil.
 // Decisión de Fase A (ver DESIGN_BRIEF) — mantener consistente en
 // todas las pantallas de fases siguientes.
+// Fase C2: "Prioridades" se consolidó dentro de "Prospectos" (CRM) —
+// la ruta vieja redirige, aquí ya no se lista.
 const SECCIONES = [
   { href: '/dashboard/objeciones', label: 'Objeciones', icono: '💬' },
-  { href: '/dashboard/prioridades', label: 'Prioridades', icono: '🎯' },
   { href: '/dashboard/prospectos', label: 'Prospectos', icono: '👥' },
   { href: '/dashboard/suscripcion', label: 'Suscripción', icono: '💳' },
   { href: '/dashboard/ajustes', label: 'Ajustes', icono: '⚙️' },
@@ -27,7 +28,7 @@ export default function NavLinks({
 }) {
   const pathname = usePathname()
   const secciones = esLider
-    ? [...SECCIONES.slice(0, 3), SECCION_EQUIPO, ...SECCIONES.slice(3)]
+    ? [...SECCIONES.slice(0, 2), SECCION_EQUIPO, ...SECCIONES.slice(2)]
     : SECCIONES
 
   if (orientacion === 'inferior') {
@@ -54,7 +55,7 @@ export default function NavLinks({
 
   return (
     <nav className="space-y-1">
-      {SECCIONES.map((s) => {
+      {secciones.map((s) => {
         const activo = pathname.startsWith(s.href)
         return (
           <Link
